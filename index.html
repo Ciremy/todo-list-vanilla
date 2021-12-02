@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Page Title</title>
+<link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+<!-- <script src="script.js"></script> -->
+</head>
+<body>
+  <div class="h-100 w-full flex items-center justify-center bg-teal-lightest font-sans">
+    <div class="bg-white rounded shadow p-6 m-4 w-full lg:w-3/4 lg:max-w-lg">
+          <div class="mb-4">
+              <h1 class="text-grey-darkest">Todo List</h1>
+              <div class="flex mt-4">
+                  <input id="user_input" class="shadow appearance-none border rounded w-full py-2 px-3 mr-4 text-grey-darker" placeholder="Add Todo">
+                  <button id="submit_button" class="flex-no-shrink p-2 border-2 rounded text-teal border-teal hover:text-white hover:bg-teal">Add</button>
+              </div>
+          </div>
+          <div id="todo_list">
+          </div>
+      </div>
+  </div>
+</body>
+</html>
+
+<script lang='js'>
+    let input = document.querySelector('#user_input').value
+    let addButton = document.querySelector('#submit_button')
+
+    addButton.addEventListener('click', addElementToList)
+
+    function addElement(task_content){
+        const globalDiv = document.querySelector('#todo_list')
+        const displayTodo = document.createElement('div')
+        displayTodo.className =  "flex mb-4 items-center"
+        const text = document.createElement('p')
+        text.className = "w-full text-grey-darkest"
+        text.innerHTML = task_content
+        text.id = "textId"
+        // text.addEventListener()
+        const buttonDone = document.createElement('button')
+        buttonDone.className = "flex-no-shrink p-2 ml-4 mr-2 border-2 rounded hover:text-white text-green border-green hover:bg-green"
+        buttonDone.innerHTML = 'Done'
+        buttonDone.addEventListener('click', makeToDone)
+        const buttonRemove = document.createElement('button')
+        buttonRemove.innerHTML = 'Remove'
+        buttonRemove.className = "flex-no-shrink p-2 ml-2 border-2 rounded text-red border-red hover:text-white hover:bg-red"
+        buttonRemove.addEventListener('click', remove)
+        const buttonEdit = document.createElement('button') 
+        buttonEdit.className = "flex-no-shrink p-2 ml-2 border-2 rounded text-red border-red hover:text-white hover:bg-red"
+        buttonEdit.innerHTML = 'Edit'
+        buttonEdit.addEventListener('click', edit)
+        displayTodo.append(text)
+        displayTodo.append(buttonDone)
+        displayTodo.append(buttonEdit)
+        displayTodo.append(buttonRemove)
+        globalDiv.append(displayTodo)
+
+    }
+    function addElementToList() {
+        let user_input = document.querySelector('#user_input')
+        let newObject = { content: user_input.value}
+        addElement(newObject.content)
+        user_input.value = ''
+    }
+    function remove(e) {
+        let wrapperDiv = e.target.parentElement
+        document.querySelector('#todo_list').removeChild(wrapperDiv)
+    }
+    function makeToDone(e){
+        let wrapperDiv = e.target.parentElement
+        e.target.parentElement.style = 'background-color: green;'
+        e.target.style = 'visibility: hidden;'
+    }
+    function edit(e){
+    let input = document.querySelector("#user_input")
+    input.placeholder = 'Edit and press enter'
+    input.addEventListener('keyup', (event) => {
+    if(event.keyCode == 13){
+      e.target.parentElement.childNodes[0].innerHTML = input.value
+      console.log(e.target.parentElement.childNodes[0], input.value)
+      input.placeholder = 'Add ToDo'
+      input.value = ''
+    }
+  }) 
+}
+</script>
